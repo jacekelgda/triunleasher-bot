@@ -9,7 +9,7 @@ if (!process.env.token) {
 }
 
 var controller = Botkit.slackbot({
-    debug: false,
+    debug: true,
     stats_optout: true
 });
 
