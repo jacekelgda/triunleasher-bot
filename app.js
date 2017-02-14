@@ -7,7 +7,7 @@ if (!process.env.token) {
 }
 
 var controller = Botkit.slackbot({
-    debug: true,
+    debug: false,
     stats_optout: true
 });
 
@@ -52,6 +52,7 @@ getHouseEmojiName = (house) => {
 }
 
 checkResults = (goalsAchieved, house, bot, message) => {
+
   scores.push({path: house, score: goalsAchieved.length * 10, house: getFriendlyHouseName(house), emoji: getHouseEmojiName(house)});
 
   scores.sort(function(a, b) {
@@ -59,7 +60,6 @@ checkResults = (goalsAchieved, house, bot, message) => {
   })
 
   let scoresMessage = '';
-
   if (scores.length === 3) {
     scores.forEach(function(score) {
       scoresMessage += score.emoji + ' ' + score.house + ' ' + score.score + ' PTS   ';
@@ -68,27 +68,8 @@ checkResults = (goalsAchieved, house, bot, message) => {
     bot.reply(message, scoresMessage);
   }
 
-
   return true;
 }
-
-// checkResults = (goalsAchieved, house, bot, message) => {
-//   switch (house) {
-//     case 'house.jaceclaw':
-//       scores.jaceclaw = goalsAchieved.length;
-//       break;
-//     case 'house.karolin':
-//       scores.karolin = goalsAchieved.length;
-//       break;
-//     case 'house.kubindor':
-//       scores.kubindor = goalsAchieved.length;
-//       break;
-//   }
-//   if (scores.jaceclaw > 0 && scores.karolin > 0 && scores.kubindor > 0) {
-//     bot.reply(message, 'House Jaceclaw: ' + scores.jaceclaw * 10 + 'PTS ,House Karolin: ' + scores.karolin * 10 + 'PTS ,House Kubindor: ' + scores.kubindor * 10 + 'PTS');
-//   }
-//   return true;
-// }
 
 getHousePathsUrl = (userId) => {
   return 'http://paths.unleash.x-team.com/api/v1/paths.json?userId=' + userId;
@@ -120,6 +101,7 @@ controller.hears(['\\*House Jaceclaw\\* has completed a goal',
   '\\*House Karolin\\* has completed a goal!'],
   'bot_message,ambient',
   function(bot, message) {
+    scores = [];
     this.requestPaths('house.jaceclaw', bot, message);
     this.requestPaths('house.kubindor', bot, message);
     this.requestPaths('house.karolin', bot, message);
