@@ -101,9 +101,11 @@ controller.hears(['\\*House Jaceclaw\\* has completed a goal',
   '\\*House Karolin\\* has completed a goal!'],
   'bot_message,ambient',
   function(bot, message) {
-    scores = [];
-    this.requestPaths('house.jaceclaw', bot, message);
-    this.requestPaths('house.kubindor', bot, message);
-    this.requestPaths('house.karolin', bot, message);
+    setTimeout(function(){
+      scores = [];
+      requestPaths('house.jaceclaw', bot, message);
+      requestPaths('house.kubindor', bot, message);
+      requestPaths('house.karolin', bot, message);
+    }, 10000);
   }
 );
