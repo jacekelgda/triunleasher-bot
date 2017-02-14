@@ -76,7 +76,14 @@ getHousePathsUrl = (userId) => {
 }
 
 requestPaths = (house, bot, message) => {
-  request(getHousePathsUrl(house), function (error, response, body) {
+  var options = {
+    url: getHousePathsUrl(house) + "&ie="+(new Date()).getTime(),
+    headers: {
+      'Cache-Control':'no-cache'
+    }
+  };
+
+  request(options, function (error, response, body) {
     if (!error && response.statusCode == 200) {
 
       let paths = JSON.parse(body);
@@ -106,6 +113,6 @@ controller.hears(['\\*House Jaceclaw\\* has completed a goal',
       requestPaths('house.jaceclaw', bot, message);
       requestPaths('house.kubindor', bot, message);
       requestPaths('house.karolin', bot, message);
-    }, 10000);
+    }, 500);
   }
 );
